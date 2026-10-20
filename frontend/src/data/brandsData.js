@@ -1,0 +1,18 @@
+export const POPULAR_BRANDS = [
+    { id: 'maruti-suzuki', name: 'Maruti Suzuki', brandQuery: 'Maruti Suzuki', logo: '/brands/maruti-suzuki.svg' },
+    { id: 'hyundai', name: 'Hyundai', brandQuery: 'Hyundai', logo: '/brands/hyundai.svg' },
+    { id: 'tata', name: 'Tata', brandQuery: 'Tata', logo: '/brands/tata.svg' },
+    { id: 'mahindra', name: 'Mahindra', brandQuery: 'Mahindra', logo: '/brands/mahindra.svg' },
+    { id: 'toyota', name: 'Toyota', brandQuery: 'Toyota', logo: '/brands/toyota.svg' },
+    { id: 'kia', name: 'Kia', brandQuery: 'Kia', logo: '/brands/kia.svg' },
+    { id: 'honda', name: 'Honda', brandQuery: 'Honda', logo: '/brands/honda.svg' },
+    { id: 'bmw', name: 'BMW', brandQuery: 'BMW', logo: '/brands/bmw.svg' },
+    { id: 'mercedes-benz', name: 'Mercedes-Benz', brandQuery: 'Mercedes-Benz', logo: '/brands/mercedes-benz.svg' },
+    { id: 'audi', name: 'Audi', brandQuery: 'Audi', logo: '/brands/audi.svg' },
+    { id: 'volkswagen', name: 'Volkswagen', brandQuery: 'Volkswagen', logo: '/brands/volkswagen.svg' },
+    { id: 'skoda', name: 'Skoda', brandQuery: 'Skoda', logo: '/brands/skoda.svg' },
+    { id: 'mg', name: 'MG', brandQuery: 'MG', logo: '/brands/mg.svg' },
+    { id: 'jeep', name: 'Jeep', brandQuery: 'Jeep', logo: '/brands/jeep.svg' },
+    { id: 'nissan', name: 'Nissan', brandQuery: 'Nissan', logo: '/brands/nissan.svg' },
+    { id: 'bentley', name: 'Bentley', brandQuery: 'Bentley', logo: '/brands/bentley.svg' },
+];
