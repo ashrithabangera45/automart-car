@@ -14,8 +14,9 @@ const ExploreOtherCars = ({ excludeIds = [] }) => {
     const scrollRef = useRef(null);
 
     useEffect(() => {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         // Fetch all cars
-        axios.get('http://localhost:5000/api/cars')
+        axios.get(`${API_URL}/cars`)
             .then(res => {
                 const fetchedCars = Array.isArray(res.data) ? res.data : (res.data?.cars || []);
                 setCars(fetchedCars);
@@ -24,9 +25,10 @@ const ExploreOtherCars = ({ excludeIds = [] }) => {
     }, []);
 
     useEffect(() => {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         // Fetch user's wishlist
         if (user && user.token) {
-            axios.get('http://localhost:5000/api/wishlist', { headers: { Authorization: `Bearer ${user.token}` }})
+            axios.get(`${API_URL}/wishlist`, { headers: { Authorization: `Bearer ${user.token}` }})
                  .then(res => setWishlist(new Set(res.data.map(item => item.carId?._id || item.carId))))
                  .catch(err => console.error(err));
         } else {
@@ -53,8 +55,9 @@ const ExploreOtherCars = ({ excludeIds = [] }) => {
             });
         }
         try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             if (wishlist.has(carId)) {
-                await axios.delete(`http://localhost:5000/api/wishlist/${carId}`, { headers: { Authorization: `Bearer ${user.token}` }});
+                await axios.delete(`${API_URL}/wishlist/${carId}`, { headers: { Authorization: `Bearer ${user.token}` }});
                 updateWishlistCount();
                 setWishlist(prev => {
                     const next = new Set(prev);
@@ -67,7 +70,7 @@ const ExploreOtherCars = ({ excludeIds = [] }) => {
                     type: 'info'
                 });
             } else {
-                await axios.post('http://localhost:5000/api/wishlist', { carId }, { headers: { Authorization: `Bearer ${user.token}` }});
+                await axios.post(`${API_URL}/wishlist`, { carId }, { headers: { Authorization: `Bearer ${user.token}` }});
                 updateWishlistCount();
                 setWishlist(prev => {
                     const next = new Set(prev);
@@ -118,7 +121,8 @@ const ExploreOtherCars = ({ excludeIds = [] }) => {
             return;
         }
         try {
-            await axios.post('http://localhost:5000/api/cart', { carId: targetCar._id, price: targetCar.price }, { headers: { Authorization: `Bearer ${user.token}` }});
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            await axios.post(`${API_URL}/cart`, { carId: targetCar._id, price: targetCar.price }, { headers: { Authorization: `Bearer ${user.token}` }});
             updateCartCount();
             showToast({
                 title: 'Added to Cart! 🛒',

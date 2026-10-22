@@ -98,7 +98,8 @@ const MyOrders = () => {
             return;
         }
 
-        axios.get('http://localhost:5000/api/orders/myorders', { 
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+        axios.get(`${API_URL}/orders/myorders`, { 
             headers: { Authorization: `Bearer ${user.token}` }
         })
         .then(res => {

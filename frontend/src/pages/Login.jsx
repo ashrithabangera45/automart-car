@@ -60,8 +60,9 @@ const Login = ({ initialMode = 'login' }) => {
         e.preventDefault();
         setError(null);
         setIsLoading(true);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/login', loginData);
+            const { data } = await axios.post(`${API_URL}/auth/login`, loginData);
             loginSuccess(data.user);
             if (location.state?.autoBuy && (location.state?.fromCar || location.state?.carId)) {
                 navigate(`/checkout?carId=${location.state.fromCar || location.state.carId}`);
@@ -88,8 +89,9 @@ const Login = ({ initialMode = 'login' }) => {
         if (!validateSignup()) return;
         
         setIsLoading(true);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            await axios.post('http://localhost:5000/api/auth/register', signupData);
+            await axios.post(`${API_URL}/auth/register`, signupData);
             setSuccessMessage("Account created successfully. Please login.");
             setTimeout(() => {
                 setMode('login');

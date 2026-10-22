@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const ManageCars = () => {
     const [cars, setCars] = useState([]);
     
     const fetchCars = async () => {
-        const { data } = await axios.get('http://localhost:5000/api/cars');
+        const { data } = await axios.get(`${API_URL}/cars`);
         setCars(data);
     };
 
@@ -18,7 +20,7 @@ const ManageCars = () => {
         if (window.confirm('Are you sure you want to delete this car?')) {
             const user = JSON.parse(localStorage.getItem('user'));
             const config = { headers: { Authorization: `Bearer ${user.token}` } };
-            await axios.delete(`http://localhost:5000/api/cars/${id}`, config);
+            await axios.delete(`${API_URL}/cars/${id}`, config);
             fetchCars(); // Refresh immediately
         }
     };
@@ -26,7 +28,7 @@ const ManageCars = () => {
     const updateStock = async (car, newStock) => {
         const user = JSON.parse(localStorage.getItem('user'));
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.put(`http://localhost:5000/api/cars/${car._id}`, { stock: newStock }, config);
+        await axios.put(`${API_URL}/cars/${car._id}`, { stock: newStock }, config);
         fetchCars(); // Refresh immediately
     };
 

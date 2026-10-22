@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const DEFAULT_FEATURES = [
     'ABS', 'Airbags', 'Air Conditioner', 'Bluetooth', 'Apple CarPlay', 'Android Auto', 
     'Cruise Control', 'Sunroof', '360° Camera', 'Rear Camera', 'GPS Navigation', 
@@ -41,7 +43,7 @@ const CarForm = () => {
 
     useEffect(() => {
         if (id) {
-            axios.get(`http://localhost:5000/api/cars/${id}`).then(res => {
+            axios.get(`${API_URL}/cars/${id}`).then(res => {
                 const data = res.data;
                 setFormData({
                     ...data,
@@ -169,7 +171,7 @@ const CarForm = () => {
                 }
             };
 
-            const res = await axios.post('http://localhost:5000/api/cars/upload-model', uploadData, config);
+            const res = await axios.post(`${API_URL}/cars/upload-model`, uploadData, config);
             if (res.data && res.data.modelUrl) {
                 setFormData(prev => ({ ...prev, model3d: res.data.modelUrl }));
             }
@@ -194,9 +196,9 @@ const CarForm = () => {
             };
 
             if (id) {
-                await axios.put(`http://localhost:5000/api/cars/${id}`, cleanedData, config);
+                await axios.put(`${API_URL}/cars/${id}`, cleanedData, config);
             } else {
-                await axios.post('http://localhost:5000/api/cars', cleanedData, config);
+                await axios.post(`${API_URL}/cars`, cleanedData, config);
             }
             navigate('/admin/dashboard');
         } catch (err) {

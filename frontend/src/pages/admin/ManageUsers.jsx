@@ -3,6 +3,8 @@ import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 import { Users } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
@@ -11,7 +13,7 @@ const ManageUsers = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/admin/users', {
+                const res = await axios.get(`${API_URL}/admin/users`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 });
                 setUsers(res.data);

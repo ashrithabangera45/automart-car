@@ -95,8 +95,9 @@ const Contact = () => {
         setSubmitError('');
         setSubmitSuccess(false);
         
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            const response = await axios.post('http://localhost:5000/api/contact', {
+            const response = await axios.post(`${API_URL}/contact`, {
                 fullName: trimmedName,
                 email: trimmedEmail,
                 phone: trimmedPhone,

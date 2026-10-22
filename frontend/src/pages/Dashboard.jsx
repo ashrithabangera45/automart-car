@@ -32,8 +32,9 @@ const Dashboard = () => {
     useEffect(() => {
         if (!user || !user.token) return;
         const fetchData = async () => {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             try {
-                const res = await axios.get('http://localhost:5000/api/users/dashboard', {
+                const res = await axios.get(`${API_URL}/users/dashboard`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 });
                 setData(res.data);

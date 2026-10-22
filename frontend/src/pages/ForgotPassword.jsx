@@ -31,8 +31,9 @@ const ForgotPassword = () => {
         if (!validateEmail()) return;
 
         setIsLoading(true);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/forgot-password', {
+            const response = await axios.post(`${API_URL}/auth/forgot-password`, {
                 email: email.trim()
             });
 

@@ -11,8 +11,9 @@ const AdminRegister = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            await axios.post('http://localhost:5000/api/admin/register', { email, password });
+            await axios.post(`${API_URL}/admin/register`, { email, password });
             navigate('/admin/login');
         } catch (err) {
             setError(err.response?.data?.message || err.message || 'Registration failed');

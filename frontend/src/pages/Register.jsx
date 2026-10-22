@@ -53,8 +53,9 @@ const Register = () => {
         
         if (!validate()) return;
         
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            await axios.post('http://localhost:5000/api/auth/register', formData);
+            await axios.post(`${API_URL}/auth/register`, formData);
             
             setSuccessMessage("Account created successfully. Please login.");
             setTimeout(() => {

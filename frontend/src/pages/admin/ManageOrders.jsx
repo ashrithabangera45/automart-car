@@ -55,7 +55,8 @@ const ManageOrders = () => {
             if (!userStr) return;
             const user = JSON.parse(userStr);
 
-            const { data } = await axios.get('http://localhost:5000/api/orders', {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const { data } = await axios.get(`${API_URL}/orders`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             setOrders(Array.isArray(data) ? data : []);
@@ -91,8 +92,9 @@ const ManageOrders = () => {
         try {
             setIsUpdating(true);
             const user = JSON.parse(localStorage.getItem('user'));
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             const { data } = await axios.put(
-                `http://localhost:5000/api/orders/${orderId}/status`, 
+                `${API_URL}/orders/${orderId}/status`, 
                 { status: newStatus }, 
                 { headers: { Authorization: `Bearer ${user.token}` } }
             );
@@ -125,8 +127,9 @@ const ManageOrders = () => {
         try {
             setIsUpdating(true);
             const user = JSON.parse(localStorage.getItem('user'));
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             const { data } = await axios.put(
-                `http://localhost:5000/api/orders/${orderId}/status`, 
+                `${API_URL}/orders/${orderId}/status`, 
                 { paymentStatus: newPaymentStatus }, 
                 { headers: { Authorization: `Bearer ${user.token}` } }
             );

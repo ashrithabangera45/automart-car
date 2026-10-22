@@ -20,8 +20,9 @@ const Cars = () => {
     const [wishlist, setWishlist] = useState(new Set());
 
     useEffect(() => {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         if (user && user.token) {
-            axios.get('http://localhost:5000/api/wishlist', { headers: { Authorization: `Bearer ${user.token}` } })
+            axios.get(`${API_URL}/wishlist`, { headers: { Authorization: `Bearer ${user.token}` } })
                  .then(res => setWishlist(new Set(res.data.map(item => item.carId?._id || item.carId))))
                  .catch(console.error);
         } else {
@@ -31,8 +32,9 @@ const Cars = () => {
 
     useEffect(() => {
         if (location.state?.autoWishlist && location.state?.fromCar && user && user.token) {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             const targetCarId = location.state.fromCar;
-            axios.post('http://localhost:5000/api/wishlist', { carId: targetCarId }, { headers: { Authorization: `Bearer ${user.token}` }})
+            axios.post(`${API_URL}/wishlist`, { carId: targetCarId }, { headers: { Authorization: `Bearer ${user.token}` }})
                 .then(() => {
                     updateWishlistCount();
                     setWishlist(prev => new Set(prev).add(targetCarId));
@@ -66,8 +68,9 @@ const Cars = () => {
             });
         }
         try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             if (wishlist.has(carId)) {
-                await axios.delete(`http://localhost:5000/api/wishlist/${carId}`, { headers: { Authorization: `Bearer ${user.token}` }});
+                await axios.delete(`${API_URL}/wishlist/${carId}`, { headers: { Authorization: `Bearer ${user.token}` }});
                 updateWishlistCount();
                 setWishlist(prev => {
                     const next = new Set(prev);
@@ -75,7 +78,7 @@ const Cars = () => {
                     return next;
                 });
             } else {
-                await axios.post('http://localhost:5000/api/wishlist', { carId }, { headers: { Authorization: `Bearer ${user.token}` }});
+                await axios.post(`${API_URL}/wishlist`, { carId }, { headers: { Authorization: `Bearer ${user.token}` }});
                 updateWishlistCount();
                 setWishlist(prev => {
                     const next = new Set(prev);
@@ -143,7 +146,8 @@ const Cars = () => {
             queryParams.set('includeFacets', 'true');
             
             try {
-                const { data } = await axios.get(`http://localhost:5000/api/cars?${queryParams.toString()}`);
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                const { data } = await axios.get(`${API_URL}/cars?${queryParams.toString()}`);
                 setCars(data.cars || []);
                 if (data.facets) setFacets(data.facets);
             } catch (err) {

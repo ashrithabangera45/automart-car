@@ -68,10 +68,12 @@ const FeedbackSection = ({
         5: 'Excellent - Exceeded expectations!'
     };
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
     // Determine the API base URL
     const fetchUrl = carId 
-        ? `http://localhost:5000/api/feedback/car/${carId}` 
-        : `http://localhost:5000/api/feedback`;
+        ? `${API_URL}/feedback/car/${carId}` 
+        : `${API_URL}/feedback`;
 
     // Fetch Reviews
     const fetchFeedback = async (pageNum = 1, append = false) => {
@@ -112,7 +114,8 @@ const FeedbackSection = ({
         }
 
         try {
-            const url = `http://localhost:5000/api/feedback/my-review${carId ? `?carId=${carId}` : ''}`;
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const url = `${API_URL}/feedback/my-review${carId ? `?carId=${carId}` : ''}`;
             const res = await axios.get(url, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
@@ -213,7 +216,8 @@ const FeedbackSection = ({
                 carId: carId || null
             };
 
-            const res = await axios.post('http://localhost:5000/api/feedback', payload, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const res = await axios.post(`${API_URL}/feedback`, payload, {
                 headers: { 
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${user.token}` 
@@ -259,7 +263,8 @@ const FeedbackSection = ({
         if (!window.confirm('Are you sure you want to delete this review?')) return;
 
         try {
-            const res = await axios.delete(`http://localhost:5000/api/feedback/${reviewId}`, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const res = await axios.delete(`${API_URL}/feedback/${reviewId}`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
 

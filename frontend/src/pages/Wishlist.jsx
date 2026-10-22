@@ -16,8 +16,9 @@ const Wishlist = () => {
     const fetchWishlist = async () => {
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user || !user.token) return;
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            const { data } = await axios.get('http://localhost:5000/api/wishlist', { headers: { Authorization: `Bearer ${user.token}` }});
+            const { data } = await axios.get(`${API_URL}/wishlist`, { headers: { Authorization: `Bearer ${user.token}` }});
             setWishlist(data);
         } catch (err) {
             console.error(err);
@@ -29,8 +30,9 @@ const Wishlist = () => {
     const remove = async (carId) => {
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user || !user.token) return;
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            await axios.delete(`http://localhost:5000/api/wishlist/${carId}`, { headers: { Authorization: `Bearer ${user.token}` }});
+            await axios.delete(`${API_URL}/wishlist/${carId}`, { headers: { Authorization: `Bearer ${user.token}` }});
             fetchWishlist();
             updateWishlistCount();
             showToast({
@@ -63,8 +65,9 @@ const Wishlist = () => {
             });
             return;
         }
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            await axios.post('http://localhost:5000/api/cart', { carId: car._id, price: car.price }, { headers: { Authorization: `Bearer ${user.token}` }});
+            await axios.post(`${API_URL}/cart`, { carId: car._id, price: car.price }, { headers: { Authorization: `Bearer ${user.token}` }});
             updateCartCount();
             showToast({
                 title: 'Added to Cart! 🛒',
@@ -111,7 +114,8 @@ const Wishlist = () => {
                                     <p style={{ color: '#dc2626', fontWeight: 'bold' }}>Car no longer available</p>
                                     <button onClick={() => {
                                         const user = JSON.parse(localStorage.getItem('user'));
-                                        axios.delete(`http://localhost:5000/api/wishlist/${item._id}`, { headers: { Authorization: `Bearer ${user?.token}` }})
+                                        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                                        axios.delete(`${API_URL}/wishlist/${item._id}`, { headers: { Authorization: `Bearer ${user?.token}` }})
                                             .then(() => { fetchWishlist(); updateWishlistCount(); });
                                     }} style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600' }}>Remove</button>
                                 </div>

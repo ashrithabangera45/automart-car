@@ -10,9 +10,11 @@ const UserIssues = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('tickets'); // 'tickets', 'service', or 'contact'
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
     const fetchIssues = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/admin/issues', {
+            const res = await axios.get(`${API_URL}/admin/issues`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             setIssues(res.data);
@@ -29,7 +31,7 @@ const UserIssues = () => {
 
     const handleUpdateStatus = async (type, id, newStatus) => {
         try {
-            await axios.put(`http://localhost:5000/api/admin/issues/${type}/${id}`, { status: newStatus }, {
+            await axios.put(`${API_URL}/admin/issues/${type}/${id}`, { status: newStatus }, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             fetchIssues(); // Refresh the list

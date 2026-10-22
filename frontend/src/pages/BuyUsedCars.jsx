@@ -41,8 +41,9 @@ const BuyUsedCars = () => {
 
     // Fetch wishlist for logged-in user
     useEffect(() => {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         if (user && user.token) {
-            axios.get('http://localhost:5000/api/wishlist', { 
+            axios.get(`${API_URL}/wishlist`, { 
                 headers: { Authorization: `Bearer ${user.token}` } 
             })
             .then(res => setWishlist(new Set(res.data.map(item => item.carId?._id || item.carId))))
@@ -63,7 +64,8 @@ const BuyUsedCars = () => {
                 }
                 params.set('includeFacets', 'true');
 
-                const { data } = await axios.get(`http://localhost:5000/api/cars?${params.toString()}`);
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                const { data } = await axios.get(`${API_URL}/cars?${params.toString()}`);
                 const carList = data.cars || (Array.isArray(data) ? data : []);
                 setUsedCars(carList);
                 if (data.facets) setFacets(data.facets);
@@ -89,8 +91,9 @@ const BuyUsedCars = () => {
 
     useEffect(() => {
         if (location.state?.autoWishlist && location.state?.fromCar && user && user.token) {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             const targetCarId = location.state.fromCar;
-            axios.post('http://localhost:5000/api/wishlist', { carId: targetCarId }, { headers: { Authorization: `Bearer ${user.token}` }})
+            axios.post(`${API_URL}/wishlist`, { carId: targetCarId }, { headers: { Authorization: `Bearer ${user.token}` }})
                 .then(() => {
                     updateWishlistCount();
                     setWishlist(prev => new Set(prev).add(targetCarId));
@@ -124,8 +127,9 @@ const BuyUsedCars = () => {
             });
         }
         try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             if (wishlist.has(carId)) {
-                await axios.delete(`http://localhost:5000/api/wishlist/${carId}`, { 
+                await axios.delete(`${API_URL}/wishlist/${carId}`, { 
                     headers: { Authorization: `Bearer ${user.token}` } 
                 });
                 updateWishlistCount();
@@ -135,7 +139,7 @@ const BuyUsedCars = () => {
                     return next;
                 });
             } else {
-                await axios.post('http://localhost:5000/api/wishlist', { carId }, { 
+                await axios.post(`${API_URL}/wishlist`, { carId }, { 
                     headers: { Authorization: `Bearer ${user.token}` } 
                 });
                 updateWishlistCount();

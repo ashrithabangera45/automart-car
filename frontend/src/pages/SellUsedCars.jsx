@@ -269,7 +269,8 @@ const SellUsedCars = () => {
             const token = user?.token || JSON.parse(localStorage.getItem('user') || '{}')?.token;
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-            const res = await axios.post('http://localhost:5000/api/valuation/estimate', payload, { headers });
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const res = await axios.post(`${API_URL}/valuation/estimate`, payload, { headers });
             if (res.data.success && res.data.valuation) {
                 setValuationResult(res.data.valuation);
                 setStep(5);
@@ -542,7 +543,8 @@ const SellUsedCars = () => {
                 userId: user?._id || null
             };
 
-            await axios.post('http://localhost:5000/api/valuation/lead', payload);
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            await axios.post(`${API_URL}/valuation/lead`, payload);
             setBookingSuccess(true);
             showToast({
                 title: 'Inspection Booked! 🚗',

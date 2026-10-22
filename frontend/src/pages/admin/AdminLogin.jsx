@@ -24,8 +24,9 @@ const AdminLogin = () => {
         e.preventDefault();
         setError(null);
         setIsLoading(true);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            const { data } = await axios.post('http://localhost:5000/api/admin/login', { email, password });
+            const { data } = await axios.post(`${API_URL}/admin/login`, { email, password });
             localStorage.setItem('user', JSON.stringify(data));
             // Trigger a page reload to let AuthContext pick it up correctly, or navigate
             window.location.href = '/admin/dashboard';

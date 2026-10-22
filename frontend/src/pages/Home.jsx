@@ -32,11 +32,13 @@ const Home = () => {
         }
         meta.content = 'AutoMart is your trusted destination for finding the right premium car. Explore, compare, and buy your perfect car today.';
 
-        axios.get('http://localhost:5000/api/cars').then(res => {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+        axios.get(`${API_URL}/cars`).then(res => {
             setFeaturedCars(res.data.slice(0, 4));
         }).catch(err => console.error(err));
 
-        axios.get('http://localhost:5000/api/feedback?limit=3').then(res => {
+        axios.get(`${API_URL}/feedback?limit=3`).then(res => {
             if (res.data.success) {
                 setRecentReviews(res.data.reviews || []);
                 setWebsiteStats({
@@ -49,14 +51,15 @@ const Home = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         if (searchQuery.trim()) {
-            axios.get(`http://localhost:5000/api/cars?search=${searchQuery}`).then(res => {
+            axios.get(`${API_URL}/cars?search=${searchQuery}`).then(res => {
                 setFeaturedCars(res.data);
                 setIsSearching(true);
                 document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
             }).catch(err => console.error(err));
         } else {
-            axios.get('http://localhost:5000/api/cars').then(res => {
+            axios.get(`${API_URL}/cars`).then(res => {
                 setFeaturedCars(res.data.slice(0, 4));
                 setIsSearching(false);
                 document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });

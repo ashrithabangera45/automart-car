@@ -17,10 +17,12 @@ const ManageMessages = () => {
     const [actionLoading, setActionLoading] = useState(false);
     const [notification, setNotification] = useState(null);
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
     const fetchMessages = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('http://localhost:5000/api/contact');
+            const res = await axios.get(`${API_URL}/contact`);
             setMessages(res.data);
             setLoading(false);
         } catch (err) {
@@ -41,7 +43,7 @@ const ManageMessages = () => {
     const handleUpdateStatus = async (id, newStatus) => {
         setActionLoading(true);
         try {
-            await axios.put(`http://localhost:5000/api/contact/${id}/status`, { status: newStatus });
+            await axios.put(`${API_URL}/contact/${id}/status`, { status: newStatus });
             setMessages(prev => prev.map(m => m._id === id ? { ...m, status: newStatus } : m));
             if (selectedMessage && selectedMessage._id === id) {
                 setSelectedMessage(prev => ({ ...prev, status: newStatus }));
@@ -59,7 +61,7 @@ const ManageMessages = () => {
         if (!window.confirm('Are you sure you want to delete this message?')) return;
         setActionLoading(true);
         try {
-            await axios.delete(`http://localhost:5000/api/contact/${id}`);
+            await axios.delete(`${API_URL}/contact/${id}`);
             setMessages(prev => prev.filter(m => m._id !== id));
             if (selectedMessage && selectedMessage._id === id) {
                 setSelectedMessage(null);

@@ -6,6 +6,8 @@ import {
     ChevronLeft, Send, PlusCircle
 } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const ServiceSupport = () => {
     const { user } = useContext(AuthContext);
     const [activeSection, setActiveSection] = useState(null);
@@ -92,18 +94,18 @@ const CarService = () => {
     const [statusMsg, setStatusMsg] = useState({ type: '', text: '' });
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/orders/myorders', { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setOrders(res.data));
+        axios.get(`${API_URL}/orders/myorders`, { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setOrders(res.data));
         fetchRequests();
     }, []);
 
     const fetchRequests = () => {
-        axios.get('http://localhost:5000/api/support/service-requests', { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setRequests(res.data));
+        axios.get(`${API_URL}/support/service-requests`, { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setRequests(res.data));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/support/service-requests', formData, { headers: { Authorization: `Bearer ${user.token}` }});
+            await axios.post(`${API_URL}/support/service-requests`, formData, { headers: { Authorization: `Bearer ${user.token}` }});
             setStatusMsg({ type: 'success', text: 'Service request submitted successfully!' });
             setFormData({ carId: '', carName: '', serviceType: 'General Service', preferredDate: '', preferredTime: '', description: '' });
             fetchRequests();
@@ -252,18 +254,18 @@ const CustomerSupport = () => {
     const [formData, setFormData] = useState({ category: 'Order Problem', subject: '', description: '', orderId: '' });
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/orders/myorders', { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setOrders(res.data));
+        axios.get(`${API_URL}/orders/myorders`, { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setOrders(res.data));
         fetchTickets();
     }, []);
 
     const fetchTickets = () => {
-        axios.get('http://localhost:5000/api/support/tickets', { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setTickets(res.data));
+        axios.get(`${API_URL}/support/tickets`, { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setTickets(res.data));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/support/tickets', formData, { headers: { Authorization: `Bearer ${user.token}` }});
+            await axios.post(`${API_URL}/support/tickets`, formData, { headers: { Authorization: `Bearer ${user.token}` }});
             setFormData({ category: 'Order Problem', subject: '', description: '', orderId: '' });
             fetchTickets();
         } catch (err) {
@@ -335,7 +337,7 @@ const DeliverySupport = () => {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/orders/myorders', { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setOrders(res.data));
+        axios.get(`${API_URL}/orders/myorders`, { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setOrders(res.data));
     }, []);
 
     return (
@@ -370,7 +372,7 @@ const WarrantyInsurance = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/support/warranty-insurance', { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setData(res.data));
+        axios.get(`${API_URL}/support/warranty-insurance`, { headers: { Authorization: `Bearer ${user.token}` }}).then(res => setData(res.data));
     }, []);
 
     return (

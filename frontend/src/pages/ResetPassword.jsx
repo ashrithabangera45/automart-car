@@ -35,8 +35,9 @@ const ResetPassword = () => {
                 return;
             }
 
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             try {
-                await axios.get(`http://localhost:5000/api/auth/reset-password/${token}`);
+                await axios.get(`${API_URL}/auth/reset-password/${token}`);
                 if (isMounted) {
                     setTokenStatus('valid');
                 }
@@ -109,8 +110,9 @@ const ResetPassword = () => {
         if (!validateForm()) return;
 
         setIsSubmitting(true);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         try {
-            await axios.post(`http://localhost:5000/api/auth/reset-password/${token}`, {
+            await axios.post(`${API_URL}/auth/reset-password/${token}`, {
                 newPassword: passwordData.newPassword,
                 confirmPassword: passwordData.confirmPassword
             });

@@ -38,7 +38,8 @@ const CarDetails = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        axios.get(`http://localhost:5000/api/cars/${id}`).then(res => {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+        axios.get(`${API_URL}/cars/${id}`).then(res => {
             setCar(res.data);
             if (res.data.images && res.data.images.length > 0) {
                 setMainImage(res.data.images[0]);
@@ -50,7 +51,7 @@ const CarDetails = () => {
             }
             
             // Fetch similar cars
-            axios.get(`http://localhost:5000/api/cars/${id}/similar`)
+            axios.get(`${API_URL}/cars/${id}/similar`)
                 .then(simRes => setSimilarCars(simRes.data))
                 .catch(err => console.error("Error fetching similar cars", err));
                 
@@ -61,7 +62,7 @@ const CarDetails = () => {
 
         // Check if wishlisted
         if (user && user.token) {
-            axios.get('http://localhost:5000/api/wishlist', { headers: { Authorization: `Bearer ${user.token}` }})
+            axios.get(`${API_URL}/wishlist`, { headers: { Authorization: `Bearer ${user.token}` }})
                  .then(res => setWishlist(new Set(res.data.map(item => item.carId?._id || item.carId))))
                  .catch(err => console.error(err));
         } else {
@@ -133,8 +134,9 @@ const CarDetails = () => {
             });
         }
         try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             if (wishlist.has(carId)) {
-                await axios.delete(`http://localhost:5000/api/wishlist/${carId}`, { headers: { Authorization: `Bearer ${user.token}` }});
+                await axios.delete(`${API_URL}/wishlist/${carId}`, { headers: { Authorization: `Bearer ${user.token}` }});
                 updateWishlistCount();
                 setWishlist(prev => {
                     const next = new Set(prev);
@@ -147,7 +149,7 @@ const CarDetails = () => {
                     type: 'info'
                 });
             } else {
-                await axios.post('http://localhost:5000/api/wishlist', { carId }, { headers: { Authorization: `Bearer ${user.token}` }});
+                await axios.post(`${API_URL}/wishlist`, { carId }, { headers: { Authorization: `Bearer ${user.token}` }});
                 updateWishlistCount();
                 setWishlist(prev => {
                     const next = new Set(prev);
@@ -198,7 +200,8 @@ const CarDetails = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:5000/api/cart', { carId: targetCar._id, price: targetCar.price }, { headers: { Authorization: `Bearer ${user.token}` }});
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            await axios.post(`${API_URL}/cart`, { carId: targetCar._id, price: targetCar.price }, { headers: { Authorization: `Bearer ${user.token}` }});
             updateCartCount();
             showToast({
                 title: 'Added to Cart! 🛒',

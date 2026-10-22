@@ -70,8 +70,10 @@ const Checkout = () => {
 
         setIsLoading(true);
 
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
         // 1. Fetch user's saved profile details from MongoDB
-        const profilePromise = axios.get('http://localhost:5000/api/users/profile', {
+        const profilePromise = axios.get(`${API_URL}/users/profile`, {
             headers: { Authorization: `Bearer ${user.token}` }
         }).then(res => {
             const profile = res.data;
@@ -101,13 +103,13 @@ const Checkout = () => {
 
         // 2. Fetch Car or Cart
         const itemPromise = carId 
-            ? axios.get(`http://localhost:5000/api/cars/${carId}`)
+            ? axios.get(`${API_URL}/cars/${carId}`)
                 .then(res => setSingleCar(res.data))
                 .catch(err => {
                     console.error('Failed to load car details:', err);
                     setFetchError('Failed to load car details. It may have been removed.');
                 })
-            : axios.get('http://localhost:5000/api/cart', { 
+            : axios.get(`${API_URL}/cart`, { 
                 headers: { Authorization: `Bearer ${user.token}` }
             })
                 .then(res => setCart(res.data))
@@ -240,8 +242,9 @@ const Checkout = () => {
         // If user chose "Save to my profile", also persist to MongoDB profile endpoint immediately
         if (savePreference === 'profile') {
             setIsSavingProfile(true);
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             try {
-                const response = await axios.put('http://localhost:5000/api/users/profile', {
+                const response = await axios.put(`${API_URL}/users/profile`, {
                     fullName: editForm.fullName.trim(),
                     email: editForm.email.trim(),
                     phone: editForm.phone.trim(),
@@ -345,22 +348,23 @@ const Checkout = () => {
             };
 
             let firstOrderId = '';
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
             if (singleCar) {
-                const response = await axios.post('http://localhost:5000/api/orders', {
+                const response = await axios.post(`${API_URL}/orders`, {
                     ...orderPayload,
                     carId: singleCar._id
                 }, { headers: { Authorization: `Bearer ${user.token}` }});
                 firstOrderId = response.data.orderId;
             } else {
                 for (let item of cart) {
-                    const response = await axios.post('http://localhost:5000/api/orders', {
+                    const response = await axios.post(`${API_URL}/orders`, {
                         ...orderPayload,
                         carId: item.carId._id
                     }, { headers: { Authorization: `Bearer ${user.token}` }});
                     if (!firstOrderId) firstOrderId = response.data.orderId;
                 }
-                await axios.delete('http://localhost:5000/api/cart', { headers: { Authorization: `Bearer ${user.token}` }});
+                await axios.delete(`${API_URL}/cart`, { headers: { Authorization: `Bearer ${user.token}` }});
             }
 
             // Sync AuthContext if saveToProfile was requested

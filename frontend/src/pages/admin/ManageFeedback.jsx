@@ -26,7 +26,8 @@ const ManageFeedback = () => {
             if (filterType !== 'all') params.append('type', filterType);
             if (filterStatus !== 'all') params.append('status', filterStatus);
 
-            const res = await axios.get(`http://localhost:5000/api/feedback/admin/all?${params.toString()}`, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const res = await axios.get(`${API_URL}/feedback/admin/all?${params.toString()}`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
 
@@ -56,8 +57,9 @@ const ManageFeedback = () => {
 
     const handleStatusChange = async (id, newStatus) => {
         try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
             const res = await axios.patch(
-                `http://localhost:5000/api/feedback/admin/${id}/status`,
+                `${API_URL}/feedback/admin/${id}/status`,
                 { status: newStatus },
                 { headers: { Authorization: `Bearer ${user.token}` } }
             );
@@ -84,7 +86,8 @@ const ManageFeedback = () => {
         if (!window.confirm('Are you sure you want to delete this review permanently?')) return;
 
         try {
-            const res = await axios.delete(`http://localhost:5000/api/feedback/${id}`, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const res = await axios.delete(`${API_URL}/feedback/${id}`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
 

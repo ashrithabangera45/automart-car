@@ -4,13 +4,15 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import ExploreOtherCars from '../components/ExploreOtherCars';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const Cart = () => {
     const { updateCartCount } = useContext(AuthContext);
     const [cart, setCart] = useState([]);
 
     const fetchCart = async () => {
         const user = JSON.parse(localStorage.getItem('user'));
-        const { data } = await axios.get('http://localhost:5000/api/cart', { headers: { Authorization: `Bearer ${user.token}` }});
+        const { data } = await axios.get(`${API_URL}/cart`, { headers: { Authorization: `Bearer ${user.token}` }});
         setCart(data);
     };
 
@@ -18,7 +20,7 @@ const Cart = () => {
 
     const remove = async (id) => {
         const user = JSON.parse(localStorage.getItem('user'));
-        await axios.delete(`http://localhost:5000/api/cart/${id}`, { headers: { Authorization: `Bearer ${user.token}` }});
+        await axios.delete(`${API_URL}/cart/${id}`, { headers: { Authorization: `Bearer ${user.token}` }});
         fetchCart();
         updateCartCount();
     };
