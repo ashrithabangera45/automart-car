@@ -25,16 +25,30 @@ app.use('/api/feedback', require('./routes/feedbackRoutes'));
 app.use('/api/valuation', require('./routes/valuationRoutes'));
 const { verifySMTP } = require('./utils/emailService');
 
+// Global request timeout middleware (15 seconds) so requests never hang
+app.use((req, res, next) => {
+    res.setTimeout(15000, () => {
+        if (!res.headersSent) {
+            res.status(504).json({ message: 'Request timed out on server' });
+        }
+    });
+    next();
+});
+
 // Connect to MongoDB and then start the server
 connectDB().then(() => {
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
         // Safe SMTP verification check on startup without crashing the server
         verifySMTP().catch((err) => {
             console.error('[SMTP STARTUP NOTICE] SMTP verification could not run:', err.message);
         });
     });
+
+    // Configure standard server timeouts (15s request timeout, 10s keepAlive)
+    server.setTimeout(15000);
+    server.keepAliveTimeout = 10000;
 });
 // AutoMart Server active - Gmail SMTP configured
 

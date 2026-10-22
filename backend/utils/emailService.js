@@ -52,9 +52,22 @@ const createTransporter = async () => {
     }
 
     const host = (process.env.SMTP_HOST || 'smtp.gmail.com').trim();
-    const port = parseInt(process.env.SMTP_PORT, 10) || 587;
-    // Gmail SMTP port 587 requires secure: false (uses STARTTLS). Port 465 uses secure: true.
+    const port = parseInt(process.env.SMTP_PORT, 10) || 465;
     const secure = port === 465;
+
+    // If using Gmail, using service: 'gmail' with port 465 SSL bypasses cloud provider SMTP port 587 firewalls
+    if (host.includes('gmail.com') || emailUser.endsWith('@gmail.com')) {
+        return nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: emailUser,
+                pass: emailPass
+            },
+            connectionTimeout: 10000,
+            greetingTimeout: 5000,
+            socketTimeout: 10000
+        });
+    }
 
     return nodemailer.createTransport({
         host: host,
@@ -65,8 +78,11 @@ const createTransporter = async () => {
             pass: emailPass
         },
         tls: {
-            rejectUnauthorized: true
-        }
+            rejectUnauthorized: false
+        },
+        connectionTimeout: 10000,
+        greetingTimeout: 5000,
+        socketTimeout: 10000
     });
 };
 

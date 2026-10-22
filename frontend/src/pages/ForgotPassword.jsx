@@ -35,6 +35,8 @@ const ForgotPassword = () => {
         try {
             const response = await axios.post(`${API_URL}/auth/forgot-password`, {
                 email: email.trim()
+            }, {
+                timeout: 12000
             });
 
             setSuccessMessage(response.data?.message || 'If an account exists with this email address, a password reset link has been sent.');
