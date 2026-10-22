@@ -9,11 +9,13 @@ export const AuthProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
     const [wishlistCount, setWishlistCount] = useState(0);
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
     const updateWishlistCount = async () => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
         if (storedUser && storedUser.token) {
             try {
-                const res = await axios.get('http://localhost:5000/api/wishlist', { headers: { Authorization: `Bearer ${storedUser.token}` }});
+                const res = await axios.get(`${API_URL}/wishlist`, { headers: { Authorization: `Bearer ${storedUser.token}` }});
                 setWishlistCount(res.data.length);
             } catch (err) {
                 console.error(err);
@@ -27,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
         if (storedUser && storedUser.token) {
             try {
-                const res = await axios.get('http://localhost:5000/api/cart', { headers: { Authorization: `Bearer ${storedUser.token}` }});
+                const res = await axios.get(`${API_URL}/cart`, { headers: { Authorization: `Bearer ${storedUser.token}` }});
                 setCartCount(res.data.length);
             } catch (err) {
                 console.error(err);
